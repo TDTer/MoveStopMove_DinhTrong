@@ -24,13 +24,11 @@ public class Character : GameUnit
     private string animName;
     private int score;
     private Vector3 targetPoint;
-    protected float size = 1;
 
+    protected float size = 1;
     protected Weapon currentWeapon;
 
     public int Score => score;
-
-
     public bool IsDead { get; protected set; }
 
     public virtual void OnInit()

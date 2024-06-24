@@ -6,13 +6,15 @@ using UnityEngine;
 public class Player : Character
 {
     public const float TIME_TO_RELOAD = 5f;
-    private bool isMoving = false;
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] Rigidbody rb;
+    [SerializeField] bool isCanAttack;
+    [SerializeField] PantType pantType;
+
+    private bool isMoving = false;
     Character lastTarget;
     WeaponType weaponType;
-    [SerializeField] PantType pantType;
-    [SerializeField] bool isCanAttack;
+
     public Character Target => target;
 
     public int Coin => Score * 10;
