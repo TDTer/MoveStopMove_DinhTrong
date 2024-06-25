@@ -58,4 +58,9 @@ public class ShopItem : MonoBehaviour
         this.state = state;
     }
 
+    public Type GetEnumType()
+    {
+        return Type.GetType();
+    }
+
 }

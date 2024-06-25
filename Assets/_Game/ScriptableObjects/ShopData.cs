@@ -6,7 +6,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ShopData", menuName = "ScriptableObjects/ShopData", order = 1)]
 public class ShopData : ScriptableObject
 {
+    public ShopItemDatas<HatType> hats;
     public ShopItemDatas<PantType> pants;
+    public ShopItemDatas<AccessoryType> accessories;
+    public ShopItemDatas<SkinType> skins;
 }
 
 [System.Serializable]

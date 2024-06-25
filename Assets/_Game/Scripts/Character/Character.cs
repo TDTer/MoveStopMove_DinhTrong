@@ -9,32 +9,34 @@ public class Character : GameUnit
 {
     public const float ATTACK_RANGE = 5f;
     public const float TIME_ON_DEATH = 1f;
+    public const float TIME_ON_COOLDOWN = 2f;
     public const float MAX_SIZE = 2.5f;
     public const float MIN_SIZE = 1f;
 
     public Character target;
-    [SerializeField] PantData pantData;
-    [SerializeField] private Animator anim;
+
     [SerializeField] public Collider coll;
-    [SerializeField] Transform rightHandPosition;
     [SerializeField] GameObject insightMasker;
     [SerializeField] GameObject rangeAttackOutline;
-    [SerializeField] protected Renderer currentPant;
+    [SerializeField] protected Skin currentSkin;
 
     private string animName;
     private int score;
     private Vector3 targetPoint;
-
+    protected bool isCanAttack = true;
     protected float size = 1;
-    protected Weapon currentWeapon;
+
 
     public int Score => score;
+    public bool IsCanAttack { get; set; }
     public bool IsDead { get; protected set; }
 
     public virtual void OnInit()
     {
         IsDead = false;
         score = 0;
+        isCanAttack = true;
+        IsCanAttack = true;
 
         WearClothes();
     }
@@ -43,9 +45,9 @@ public class Character : GameUnit
     {
         if (this.animName != animName)
         {
-            anim.ResetTrigger(this.animName);
+            currentSkin.Anim.ResetTrigger(this.animName);
             this.animName = animName;
-            anim.SetTrigger(this.animName);
+            currentSkin.Anim.SetTrigger(this.animName);
         }
     }
 
@@ -61,6 +63,8 @@ public class Character : GameUnit
         }
 
     }
+
+
 
     public Character GetTargetInRange()
     {
@@ -78,7 +82,7 @@ public class Character : GameUnit
 
     public virtual void Throw()
     {
-        currentWeapon.Throw(this, targetPoint, size);
+        currentSkin.Weapon.Throw(this, targetPoint, size);
     }
 
     public void OnHit(UnityAction hitAction)
@@ -98,6 +102,7 @@ public class Character : GameUnit
 
     public virtual void OnDespawn()
     {
+        TakeOffClothes();
         SimplePool.Despawn(this);
     }
     public virtual void OnDeath()
@@ -110,26 +115,10 @@ public class Character : GameUnit
     public virtual void OnMoveStop() { }
 
 
-    public void ChangeWeapon(WeaponType weaponType)
-    {
-        currentWeapon = SimplePool.Spawn<Weapon>((PoolType)weaponType, rightHandPosition);
-    }
-
-    public void ChangePant(PantType pantType)
-    {
-        currentPant.material = pantData.GetPant(pantType);
-    }
-
     public virtual void WearClothes()
     {
 
     }
-
-    public virtual void TakeOffClothes()
-    {
-        SimplePool.Despawn(currentWeapon);
-    }
-
 
     public void ActiveMaker()
     {
@@ -161,11 +150,37 @@ public class Character : GameUnit
         rangeAttackOutline.transform.parent = null;
         TF.localScale = size * Vector3.one;
         rangeAttackOutline.transform.parent = TF;
-
     }
 
-    public void DespawnWeapon()
+
+    public virtual void TakeOffClothes()
     {
-        if (currentWeapon) SimplePool.Despawn(currentWeapon);
+        currentSkin?.OnDespawn();
+        SimplePool.Despawn(currentSkin);
     }
+    public void ChangeWeapon(WeaponType weaponType)
+    {
+        currentSkin.ChangeWeapon(weaponType);
+    }
+
+    public void ChangeSkin(SkinType skinType)
+    {
+        currentSkin = SimplePool.Spawn<Skin>((PoolType)skinType, TF);
+    }
+
+    public void ChangeAccessory(AccessoryType accessoryType)
+    {
+        currentSkin.ChangeAccessory(accessoryType);
+    }
+
+    public void ChangeHat(HatType hatType)
+    {
+        currentSkin.ChangeHat(hatType);
+    }
+
+    public void ChangePant(PantType pantType)
+    {
+        currentSkin.ChangePant(pantType);
+    }
+
 }

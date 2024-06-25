@@ -179,6 +179,28 @@ public enum PoolType
     Bullet_Uzi,
     Bullet_Z,
 
+
+    SKIN_Normal,
+    SKIN_Devil,
+    SKIN_Angle,
+    SKIN_Witch,
+    SKIN_Deadpool,
+    SKIN_Thor,
+
+    HAT_Arrow,
+    HAT_Cap,
+    HAT_Cowboy,
+    HAT_Crown,
+    HAT_Ear,
+    HAT_StrawHat,
+    HAT_Headphone,
+    HAT_Horn,
+    HAT_Police,
+    HAT_Rau,
+
+    ACC_Captain,
+    ACC_Shield,
+
     TargetIndicator,
 }
 

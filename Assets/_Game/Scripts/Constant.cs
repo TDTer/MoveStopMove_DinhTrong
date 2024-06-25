@@ -64,3 +64,36 @@ public enum PantType
     Pant_Skull = 7,
     Pant_vantim = 8,
 }
+
+public enum HatType
+{
+    HAT_Arrow = PoolType.HAT_Arrow,
+    HAT_Cap = PoolType.HAT_Cap,
+    HAT_Cowboy = PoolType.HAT_Cowboy,
+    HAT_Crown = PoolType.HAT_Crown,
+    HAT_Ear = PoolType.HAT_Ear,
+    HAT_StrawHat = PoolType.HAT_StrawHat,
+    HAT_Headphone = PoolType.HAT_Headphone,
+    HAT_Horn = PoolType.HAT_Horn,
+    HAT_Police = PoolType.HAT_Police,
+    HAT_Rau = PoolType.HAT_Rau,
+    HAT_None
+}
+
+public enum SkinType
+{
+    SKIN_Normal = PoolType.SKIN_Normal,
+    SKIN_Devil = PoolType.SKIN_Devil,
+    SKIN_Angle = PoolType.SKIN_Angle,
+    SKIN_Witch = PoolType.SKIN_Witch,
+    SKIN_Deadpool = PoolType.SKIN_Deadpool,
+    SKIN_Thor = PoolType.SKIN_Thor,
+}
+
+public enum AccessoryType
+{
+
+    ACC_CaptainShield = PoolType.ACC_Captain,
+    ACC_Shield = PoolType.ACC_Shield,
+    ACC_None
+}

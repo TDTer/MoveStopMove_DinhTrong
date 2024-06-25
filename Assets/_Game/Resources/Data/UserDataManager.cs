@@ -12,13 +12,19 @@ public class UserDataManager : Singleton<UserDataManager>
     [Serializable]
     public class UserData
     {
-        public int level;
-        public int coin;
-        public WeaponType playerWeapon;
-        public PantType playerPant;
+        public int level = 1;
+        public int coin = 100;
+        public WeaponType playerWeapon = WeaponType.Wp_Candy_1;
+        public PantType playerPant = PantType.Pant_dabao;
+        public AccessoryType playerAccessory = AccessoryType.ACC_None;
+        public HatType playerHat = HatType.HAT_None;
+        public SkinType playerSkin = SkinType.SKIN_Normal;
 
         public int[] weaponStateList = new int[Enum.GetNames(typeof(WeaponType)).Length];
         public int[] pantStateList = new int[Enum.GetNames(typeof(PantType)).Length];
+        public int[] accessoryStateList = new int[Enum.GetNames(typeof(AccessoryType)).Length];
+        public int[] hatStateList = new int[Enum.GetNames(typeof(HatType)).Length];
+        public int[] skinStateList = new int[Enum.GetNames(typeof(SkinType)).Length];
     }
 
     [SerializeField]

@@ -61,24 +61,18 @@ public class Bot : Character
         Invoke(nameof(OnDespawn), TIME_ON_DEATH);
     }
 
+    public override void OnDespawn()
+    {
+        base.OnDespawn();
+        SimplePool.Despawn(this);
+        CancelInvoke();
+    }
     public override void OnMoveStop()
     {
         base.OnMoveStop();
         agent.enabled = false;
         ChangeAnim(Constant.ANIM_IDLE);
     }
-    // public Vector3 RandomPoint()
-    // {
-    //     Vector3 randomDirection = Random.insideUnitSphere * walkRadius;
-    //     randomDirection += transform.position;
-    //     NavMeshHit hit;
-    //     Vector3 finalPosition = Vector3.zero;
-    //     if (NavMesh.SamplePosition(randomDirection, out hit, walkRadius, 1))
-    //     {
-    //         finalPosition = hit.position;
-    //     }
-    //     return finalPosition;
-    // }
 
     public override void Throw()
     {
@@ -89,8 +83,11 @@ public class Bot : Character
     {
         base.WearClothes();
 
-        //random 
+        //change random 
+        ChangeSkin(SkinType.SKIN_Normal);
         ChangeWeapon(Utilities.RandomEnumValue<WeaponType>());
+        ChangeHat(Utilities.RandomEnumValue<HatType>());
+        ChangeAccessory(Utilities.RandomEnumValue<AccessoryType>());
         ChangePant(Utilities.RandomEnumValue<PantType>());
     }
 }

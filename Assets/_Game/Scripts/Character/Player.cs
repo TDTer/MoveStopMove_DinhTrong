@@ -6,14 +6,18 @@ using UnityEngine;
 public class Player : Character
 {
     public const float TIME_TO_RELOAD = 5f;
+
     [SerializeField] float moveSpeed = 5f;
     [SerializeField] Rigidbody rb;
-    [SerializeField] bool isCanAttack;
+    [SerializeField] SkinType skinType = SkinType.SKIN_Normal;
     [SerializeField] PantType pantType;
+    [SerializeField] HatType hatType = HatType.HAT_Cap;
+    [SerializeField] AccessoryType accessoryType = AccessoryType.ACC_Shield;
+    [SerializeField] WeaponType weaponType;
+
 
     private bool isMoving = false;
     Character lastTarget;
-    WeaponType weaponType;
 
     public Character Target => target;
 
@@ -85,13 +89,20 @@ public class Player : Character
     public override void OnAttack()
     {
         base.OnAttack();
-        if (target != null)
+        if (target != null && isCanAttack)
         {
             Throw();
             ResetAnim();
+            isCanAttack = false;
+            StartCoroutine(CoolDownAttack(TIME_ON_COOLDOWN));
         }
     }
+    public IEnumerator CoolDownAttack(float time)
+    {
+        yield return new WaitForSeconds(time);
 
+        isCanAttack = true;
+    }
     public override void OnMoveStop()
     {
         base.OnMoveStop();
@@ -107,28 +118,52 @@ public class Player : Character
 
     internal void OnSetFromData()
     {
+
+        skinType = UserDataManager.Ins.userData.playerSkin;
         weaponType = UserDataManager.Ins.userData.playerWeapon;
         pantType = UserDataManager.Ins.userData.playerPant;
+        accessoryType = UserDataManager.Ins.userData.playerAccessory;
+        hatType = UserDataManager.Ins.userData.playerHat;
     }
 
     public override void WearClothes()
     {
         base.WearClothes();
 
+        ChangeSkin(skinType);
         ChangeWeapon(weaponType);
         ChangePant(pantType);
+        ChangeAccessory(accessoryType);
+        ChangeHat(hatType);
+
     }
 
     public void TryCloth(UIShop.ShopType shopType, Enum type)
     {
         switch (shopType)
         {
+            case UIShop.ShopType.Hat:
+                currentSkin.DespawnHat();
+                ChangeHat((HatType)type);
+                break;
+
+            case UIShop.ShopType.Accessory:
+                currentSkin.DespawnAccessory();
+                ChangeAccessory((AccessoryType)type);
+                break;
+
+            case UIShop.ShopType.Skin:
+                TakeOffClothes();
+                skinType = (SkinType)type;
+                WearClothes();
+                break;
+
             case UIShop.ShopType.Pant:
                 ChangePant((PantType)type);
                 break;
 
             case UIShop.ShopType.Weapon:
-                DespawnWeapon();
+                currentSkin.DespawnWeapon();
                 ChangeWeapon((WeaponType)type);
                 break;
             default:

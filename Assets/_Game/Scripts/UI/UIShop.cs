@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using TMPro;
 using Unity.VisualScripting;
@@ -10,7 +12,7 @@ using UnityEngine.UI;
 
 public class UIShop : UICanvas
 {
-    public enum ShopType { Hat, Pant, Shield, Skin, Weapon }
+    public enum ShopType { Hat, Pant, Accessory, Skin, Weapon }
 
     [SerializeField] ShopData data;
     [SerializeField] ShopItem prefab;
@@ -76,8 +78,17 @@ public class UIShop : UICanvas
 
         switch (currentBar.Type)
         {
+            case ShopType.Hat:
+                InitShipItems(data.hats.Ts, ref itemEquiped);
+                break;
             case ShopType.Pant:
                 InitShipItems(data.pants.Ts, ref itemEquiped);
+                break;
+            case ShopType.Accessory:
+                InitShipItems(data.accessories.Ts, ref itemEquiped);
+                break;
+            case ShopType.Skin:
+                InitShipItems(data.skins.Ts, ref itemEquiped);
                 break;
             default:
                 break;
@@ -109,9 +120,28 @@ public class UIShop : UICanvas
         }
     }
 
-    public ShopItem.State GetState(Enum t)
+    public ShopItem.State GetState(ShopItem shopItem)
     {
-        return (ShopItem.State)UserDataManager.Ins.GetDataState(GetKeyEnumType(), (int)(object)t);
+        Debug.Log("=================");
+        Debug.Log(GetKeyEnumType(shopItem));
+        Debug.Log(shopItem.id);
+        return (ShopItem.State)UserDataManager.Ins.GetDataState(GetKeyEnumType(shopItem), shopItem.id);
+    }
+
+    public string GetKeyEnumType(ShopItem shopItem)
+    {
+        switch (shopItem.GetEnumType())
+        {
+            case Type t when t == typeof(HatType):
+                return "hatStateList";
+            case Type t when t == typeof(PantType):
+                return "pantStateList";
+            case Type t when t == typeof(SkinType):
+                return "skinStateList";
+            case Type t when t == typeof(AccessoryType):
+                return "accessoryStateList";
+        }
+        return "";
     }
 
 
@@ -119,7 +149,7 @@ public class UIShop : UICanvas
     {
         if (currentItem != null)
         {
-            currentItem.SetState(GetState(currentItem.Type));
+            currentItem.SetState(GetState(currentItem));
         }
 
         currentItem = item;
@@ -154,7 +184,7 @@ public class UIShop : UICanvas
         //TODO: check so tien
         if (true)
         {
-            UserDataManager.Ins.SetDataState(GetKeyEnumType(), (int)(object)currentItem.Type, (int)ShopItem.State.Bought);
+            UserDataManager.Ins.SetDataState(GetKeyEnumType(currentItem), currentItem.id, (int)ShopItem.State.Bought);
             SelectItem(currentItem);
         }
 
@@ -165,7 +195,7 @@ public class UIShop : UICanvas
         //TODO: check quang cao
         if (true)
         {
-            UserDataManager.Ins.SetDataState(GetKeyEnumType(), (int)(object)currentItem.Type, (int)ShopItem.State.Bought);
+            UserDataManager.Ins.SetDataState(GetKeyEnumType(currentItem), currentItem.id, (int)ShopItem.State.Bought);
             SelectItem(currentItem);
         }
     }
@@ -174,13 +204,28 @@ public class UIShop : UICanvas
     {
         if (currentItem != null)
         {
-            UserDataManager.Ins.SetDataState(GetKeyEnumType(), (int)(object)currentItem.Type, (int)ShopItem.State.Equipped);
+            UserDataManager.Ins.SetDataState(GetKeyEnumType(currentItem), currentItem.id, (int)ShopItem.State.Equipped);
             switch (shopType)
             {
 
                 case ShopType.Pant:
-                    UserDataManager.Ins.SetDataState("pantStateList", (int)(object)UserDataManager.Ins.userData.playerPant, (int)ShopItem.State.Bought);
+                    UserDataManager.Ins.SetDataState("pantStateList", GetTypeIndex(UserDataManager.Ins.userData.playerPant), (int)ShopItem.State.Bought);
                     UserDataManager.Ins.SetEnumData("playerPant", (PantType)currentItem.Type);
+                    break;
+
+                case ShopType.Hat:
+                    UserDataManager.Ins.SetDataState("hatStateList", GetTypeIndex(UserDataManager.Ins.userData.playerHat), (int)ShopItem.State.Bought);
+                    UserDataManager.Ins.SetEnumData("playerHat", (HatType)currentItem.Type);
+                    break;
+
+                case ShopType.Accessory:
+                    UserDataManager.Ins.SetDataState("accessoryStateList", GetTypeIndex(UserDataManager.Ins.userData.playerAccessory), (int)ShopItem.State.Bought);
+                    UserDataManager.Ins.SetEnumData("playerAccessory", (AccessoryType)currentItem.Type);
+                    break;
+
+                case ShopType.Skin:
+                    UserDataManager.Ins.SetDataState("skinStateList", GetTypeIndex(UserDataManager.Ins.userData.playerSkin), (int)ShopItem.State.Bought);
+                    UserDataManager.Ins.SetEnumData("playerSkin", (SkinType)currentItem.Type);
                     break;
 
                 case ShopType.Weapon:
@@ -207,19 +252,71 @@ public class UIShop : UICanvas
             return "pantStateList";
         }
 
+        if (typeof(T) == typeof(HatType))
+        {
+            return "hatStateList";
+        }
+
+        if (typeof(T) == typeof(SkinType))
+        {
+            return "skinStateList";
+        }
+
+        if (typeof(T) == typeof(AccessoryType))
+        {
+            return "accessoryStateList";
+        }
+
         return null;
     }
 
-    public string GetKeyEnumType()
-    {
-        switch (currentBar.Type)
-        {
-            case ShopType.Pant:
-                return "pantStateList";
 
-            default:
-                return null;
-        }
+
+    public int GetSkinTypeIndex(SkinType skin)
+    {
+        int poolTypeIndex = (int)skin;
+        int offset = (int)PoolType.SKIN_Normal;
+        return poolTypeIndex - offset;
     }
 
+    public int GetHatTypeIndex(HatType hat)
+    {
+        int poolTypeIndex = (int)hat;
+        int offset = (int)PoolType.HAT_Arrow;
+        return poolTypeIndex - offset;
+    }
+
+    public int GetAccessoryTypeIndex(AccessoryType accessory)
+    {
+        int poolTypeIndex = (int)accessory;
+        int offset = (int)PoolType.ACC_Captain;
+        return poolTypeIndex - offset;
+    }
+
+    public int GetPantTypeIndex(PantType pant)
+    {
+        int poolTypeIndex = (int)pant;
+
+        return poolTypeIndex;
+    }
+
+    public int GetTypeIndex(Enum t)
+    {
+        switch (GetKeyEnumType(currentItem))
+        {
+            case "pantStateList":
+                return GetPantTypeIndex((PantType)t);
+
+            case "accessoryStateList":
+                return GetAccessoryTypeIndex((AccessoryType)t);
+
+            case "hatStateList":
+                return GetHatTypeIndex((HatType)t);
+
+            case "skinStateList":
+                return GetSkinTypeIndex((SkinType)t);
+
+        }
+        return 0;
+    }
 }
