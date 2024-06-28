@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 608097e4ccc5fe5488935de74f9d7b14, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -810,10 +810,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1080, y: 1920}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -897,8 +897,14 @@ MonoBehaviour:
     coin: 0
     playerWeapon: 4
     playerPant: 0
+    playerAccessory: 44
+    playerHat: 42
+    playerSkin: 26
     weaponStateList: 
     pantStateList: 000000000000000000000000000000000000000000000000000000000000000000000000
+    accessoryStateList: 000000000000000000000000
+    hatStateList: 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+    skinStateList: 000000000000000000000000000000000000000000000000
 --- !u!4 &1047093149
 Transform:
   m_ObjectHideFlags: 0
@@ -914,11 +920,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!137 &1079940599 stripped
-SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -529177695146175607, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
-  m_PrefabInstance: {fileID: 1184925127}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1158389035
 GameObject:
   m_ObjectHideFlags: 0
@@ -971,6 +972,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -8699012472884554006, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
+      propertyPath: m_RootBone
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: -8699012472884554006, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
       propertyPath: m_Materials.Array.size
       value: 2
@@ -1048,6 +1053,10 @@ PrefabInstance:
       value: Character
       objectReference: {fileID: 0}
     - target: {fileID: -529177695146175607, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
+      propertyPath: m_RootBone
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: -529177695146175607, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: f872348733f815a44837574164be0226, type: 2}
@@ -1060,7 +1069,13 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: -7943378556525867576, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
+    - {fileID: 4436829760782469501, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
+    - {fileID: -2606217863934893458, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
+    - {fileID: -8542655298583481684, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
+    - {fileID: -9217817218132447574, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
+    - {fileID: 8237072887224533061, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -4216859302048453862, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
       insertIndex: -1
@@ -1090,17 +1105,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolType: 0
   target: {fileID: 0}
-  pantData: {fileID: 11400000, guid: abf4fa13021762a4c81cc90b76c48415, type: 2}
-  anim: {fileID: 3166231814858441639}
   coll: {fileID: 1694670306}
-  rightHandPosition: {fileID: 6003052534571723198}
   insightMasker: {fileID: 736018030}
   rangeAttackOutline: {fileID: 490408864}
-  currentPant: {fileID: 1079940599}
+  currentSkin: {fileID: 0}
   moveSpeed: 5
   rb: {fileID: 1694670305}
+  skinType: 26
   pantType: 0
-  isCanAttack: 0
+  hatType: 33
+  accessoryType: 43
+  weaponType: 0
 --- !u!54 &1694670305
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1342,19 +1357,9 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &3166231814858441639 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: -6057140222963153312, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
-  m_PrefabInstance: {fileID: 1184925127}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5006512735974403805 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
-  m_PrefabInstance: {fileID: 1184925127}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &6003052534571723198 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -3220319501169496967, guid: 38f9296dc39c27647a0119314baf12a2, type: 3}
   m_PrefabInstance: {fileID: 1184925127}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &8296172668020841678 stripped

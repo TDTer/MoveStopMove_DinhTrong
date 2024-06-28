@@ -10,7 +10,7 @@ public class Bot : Character
 
     protected IState<Bot> currentState;
 
-    private bool isRunning = false;
+
     private Vector3 destination;
 
     public float walkRadius = 10.0f;

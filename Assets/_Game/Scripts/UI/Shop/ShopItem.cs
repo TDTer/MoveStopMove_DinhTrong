@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using static UIShop;
-using static UnityEditor.LightingExplorerTableColumn;
+
 
 public class ShopItem : MonoBehaviour
 {
