@@ -29,7 +29,7 @@ public class BulletBoomerang : Bullet
                 {
                     state = State.Backward;
                 }
-                child.Rotate(Vector3.up * -6, Space.Self);
+                child.Rotate(Vector3.forward * -6, Space.Self);
                 break;
 
             case State.Backward:
@@ -38,7 +38,7 @@ public class BulletBoomerang : Bullet
                 {
                     OnDespawn();
                 }
-                child.Rotate(Vector3.up * -6, Space.Self);
+                child.Rotate(Vector3.forward * -6, Space.Self);
 
                 break;
         }

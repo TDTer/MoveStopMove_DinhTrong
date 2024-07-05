@@ -6,27 +6,45 @@ public class AttackState : IState<Bot>
 {
     public void OnEnter(Bot t)
     {
+        // t.OnMoveStop();
+        // if (t.IsCanAttack)
+        // {
+        //     t.OnAttack();
+        //     t.Throw();
+        //     t.IsCanAttack = false;
+        //     t.StartCoroutine(CoolDownAttack(Character.TIME_ON_COOLDOWN));
+        // }
+        // t.ChangeState(Utilities.Chance(50, 100) ? new IdleState() : new PatrolState());
+
+        // IEnumerator CoolDownAttack(float time)
+        // {
+        //     yield return new WaitForSeconds(time);
+
+        //     t.IsCanAttack = true;
+        // }
+
         t.OnMoveStop();
+        t.OnAttack();
         if (t.IsCanAttack)
         {
-            t.OnAttack();
-            t.Throw();
-            t.IsCanAttack = false;
-            t.StartCoroutine(CoolDownAttack(Character.TIME_ON_COOLDOWN));
-        }
-        t.ChangeState(Utilities.Chance(50, 100) ? new IdleState() : new PatrolState());
+            t.Counter.Start(
+                () =>
+                {
+                    t.Throw();
+                    t.Counter.Start(
+                    () =>
+                    {
+                        t.ChangeState(Utilities.Chance(50, 100) ? new IdleState() : new PatrolState());
 
-        IEnumerator CoolDownAttack(float time)
-        {
-            yield return new WaitForSeconds(time);
-
-            t.IsCanAttack = true;
+                    }, Character.TIME_DELAY_THROW);
+                }, Character.TIME_DELAY_THROW
+            );
         }
     }
 
     public void OnExecute(Bot t)
     {
-
+        t.Counter.Execute();
     }
 
     public void OnExit(Bot t)

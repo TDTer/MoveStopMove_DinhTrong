@@ -9,9 +9,10 @@ public class Bot : Character
     [SerializeField] protected NavMeshAgent agent;
 
     protected IState<Bot> currentState;
-
-
+    private CounterTime counter = new CounterTime();
+    public CounterTime Counter => counter;
     private Vector3 destination;
+
 
     public float walkRadius = 10.0f;
 
