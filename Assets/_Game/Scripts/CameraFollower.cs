@@ -36,7 +36,7 @@ public class CameraFollower : Singleton<CameraFollower>
 
     private void LateUpdate()
     {
-        offset = Vector3.Lerp(offset, targetOffset, Time.deltaTime * moveSpeed);
+        // offset = Vector3.Lerp(offset, targetOffset, Time.deltaTime * moveSpeed);
         tf.rotation = Quaternion.Lerp(tf.rotation, targetRotate, Time.deltaTime * moveSpeed);
         tf.position = Vector3.Lerp(tf.position, target.position + targetOffset, Time.deltaTime * moveSpeed);
     }

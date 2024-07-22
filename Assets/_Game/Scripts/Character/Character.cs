@@ -9,7 +9,7 @@ public class Character : GameUnit
 {
     public const float ATTACK_RANGE = 5f;
     public const float TIME_ON_DEATH = 1f;
-    public const float TIME_ON_COOLDOWN = 2f;
+    public const float TIME_ON_COOLDOWN = 1f;
     public const float MAX_SIZE = 2.5f;
     public const float MIN_SIZE = 1f;
     public const float TIME_DELAY_THROW = 0.2f;

@@ -20,7 +20,7 @@ public class Player : Character
     Character lastTarget;
 
     public Character Target => target;
-
+    private bool IsCanUpdate => GameManager.Ins.IsState(GameState.GamePlay) || GameManager.Ins.IsState(GameState.Setting);
     public int Coin => Score * 10;
 
 
@@ -38,26 +38,30 @@ public class Player : Character
     // Update is called once per frame
     void Update()
     {
-        CheckTarget();
-
-        if (Input.GetMouseButton(0) && JoyStick.direction != Vector3.zero)
+        if (IsCanUpdate && !IsDead)
         {
-            rb.MovePosition(rb.position + JoyStick.direction * moveSpeed * Time.deltaTime);
-            TF.position = rb.position;
+            CheckTarget();
 
-            TF.forward = JoyStick.direction;
+            if (Input.GetMouseButton(0) && JoyStick.direction != Vector3.zero)
+            {
+                rb.MovePosition(rb.position + JoyStick.direction * moveSpeed * Time.deltaTime);
+                TF.position = rb.position;
 
-            ChangeAnim(Constant.ANIM_RUN);
-            isMoving = true;
+                TF.forward = JoyStick.direction;
+
+                ChangeAnim(Constant.ANIM_RUN);
+                isMoving = true;
+            }
+
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                isMoving = false;
+                OnMoveStop();
+                OnAttack();
+            }
         }
 
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            isMoving = false;
-            OnMoveStop();
-            OnAttack();
-        }
     }
 
     private void CheckTarget()

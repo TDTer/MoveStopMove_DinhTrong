@@ -16,6 +16,7 @@ public class Bot : Character
 
     public float walkRadius = 10.0f;
 
+    private bool IsCanRunning => (GameManager.Ins.IsState(GameState.GamePlay) || GameManager.Ins.IsState(GameState.Revive) || GameManager.Ins.IsState(GameState.Setting));
     public bool IsDestination => Vector3.Distance(TF.position, destination) - Mathf.Abs(TF.position.y - destination.y) < 0.1f;
 
     public override void OnInit()
@@ -26,7 +27,7 @@ public class Bot : Character
 
     private void Update()
     {
-        if (currentState != null && !IsDead)
+        if (IsCanRunning && currentState != null && !IsDead)
         {
             currentState.OnExecute(this);
         }

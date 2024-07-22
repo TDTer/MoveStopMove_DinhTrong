@@ -5,11 +5,14 @@ using UnityEngine;
 
 public class BulletForward : Bullet
 {
+    public const float TIME_ALIVE = 2f;
+
+    CounterTime counterTime = new CounterTime();
 
     public override void OnInit(Character character, Vector3 target, float size)
     {
         base.OnInit(character, target, size);
-        // OnDespawn();
+        counterTime.Start(OnDespawn, TIME_ALIVE);
 
     }
 

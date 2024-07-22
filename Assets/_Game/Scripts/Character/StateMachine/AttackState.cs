@@ -36,7 +36,7 @@ public class AttackState : IState<Bot>
                     {
                         t.ChangeState(Utilities.Chance(50, 100) ? new IdleState() : new PatrolState());
 
-                    }, Character.TIME_DELAY_THROW);
+                    }, Random.Range(0f, 1f));
                 }, Character.TIME_DELAY_THROW
             );
         }
